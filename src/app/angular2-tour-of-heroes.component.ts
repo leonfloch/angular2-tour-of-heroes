@@ -1,35 +1,63 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Hero } from './hero';
 import { HeroDetailComponent } from './hero-detail/hero-detail.component';
+import {HeroService} from './hero.service';
 
 
-
-const HEROES: Hero[] = [
-  { id: 11, name: 'Mr. Nice' },
-  { id: 12, name: 'Narco' },
-  { id: 13, name: 'Bombasto' },
-  { id: 14, name: 'Celeritas' },
-  { id: 15, name: 'Magneta' },
-  { id: 16, name: 'RubberMan' },
-  { id: 17, name: 'Dynama' },
-  { id: 18, name: 'Dr IQ' },
-  { id: 19, name: 'Magma' },
-  { id: 20, name: 'Tornado' }
-];
-
-
+/**
+ * Decorador
+ */
 @Component({
   moduleId: module.id,
   selector: 'angular2-tour-of-heroes-app',
   templateUrl: 'angular2-tour-of-heroes.component.html',
   styleUrls: ['angular2-tour-of-heroes.component.css'],
-  directives: [HeroDetailComponent]
+  directives: [HeroDetailComponent],
+  providers: [HeroService]
 })
-export class Angular2TourOfHeroesAppComponent {
+
+/**
+ * Componente principal de la aplicacion
+ */
+export class Angular2TourOfHeroesAppComponent implements OnInit {
+
+  //---------------------------------------------------------------------------
+  // ATRIBUTOS
+  //---------------------------------------------------------------------------
+  
   title = 'Tour de Heros';  
   
+  /** Heroe seleccionado */
   selectedHero:Hero;
-  public heroes = HEROES;
+
+  /**lista de heroes */
+  public heroes:Hero[];
+
+  //---------------------------------------------------------------------------
+  // METODOS
+  //---------------------------------------------------------------------------
+
+  /**
+   * Constructor
+   */
+  constructor(private heroService:HeroService) {
+
+  }
+
+  /**
+   * carga la lista de heroes antes de mostrar la vista
+   */
+  ngOnInit() {
+    this.getHeroes();
+
+  }
+
+  /**
+   * Carga la lista de heroes
+   */
+  getHeroes() {
+    this.heroService.getHeroes().then(heroes => this.heroes = heroes);
+  }
 
   /**
    * Hero seleccionado
